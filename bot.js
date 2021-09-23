@@ -17,7 +17,8 @@ const web3 = new Web3(ETH_PROVIDER_URL);
 const contract = new web3.eth.Contract(abi, NFT_CONTRACT);
 
 const fetchMintData = async () => {
-  const maxSupply = await contract.methods.MAX_SUPPLY().call();
+  const maxSupplyFn = contract.methods.MAX_SUPPLY || contract.methods.maxSupply;
+  const maxSupply = await maxSupplyFn().call();
   const numMinted = await contract.methods.totalSupply().call();
   const percent = Math.round((numMinted / maxSupply) * 100);
   const result = {
